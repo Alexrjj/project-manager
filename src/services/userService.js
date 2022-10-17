@@ -4,8 +4,8 @@ module.exports = userService = {
   getAll: async () => {
     return db("users").select("users.*");
   },
-  getById: async (id) => {
-    return db("users").where("id", id);
+  getByUsername: async (username) => {
+    return db("users").where("username", username);
   },
   create: async (user) => {
     return db("users").insert(user);
