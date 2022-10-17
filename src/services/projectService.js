@@ -33,16 +33,33 @@ module.exports = projectService = {
       .join('users', 'users.username', 'projects.username')
       .select(
         'users.username',
+        'projects.id',
         'projects.title',
         'projects.zip_code',
         'projects.cost',
         'projects.done',
         'projects.deadline')
-      .where("projects.username", username);
+      .where("projects.username", username)
   },
   
-  create: async (project) => {
-    return db("projects").insert(project);
+  create: async (username, project) => {
+    console.log(project.title)
+    console.log(project.zip_code)
+    console.log(project.cost)
+    console.log(project.done)
+    console.log(project.deadline)
+    console.log(username)
+    return db("projects")
+      .insert([
+        {
+          title: project.title,
+          zip_code: project.zip_code,
+          cost: project.cost,
+          done: project.done,
+          deadline: project.deadline,
+          username: username
+        }
+      ]);
   },
   
   updatePut: async (username, id, body) => {
