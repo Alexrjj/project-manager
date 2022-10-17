@@ -21,7 +21,8 @@ module.exports = projectController = {
   
   create: async (req, res, next) => {
     try {
-      const project = await projectService.create(req.body);
+      const username = req.header('username');
+      const project = await projectService.create(username, req.body);
       res.json(project);
     } catch (error) {
       next(error);
@@ -50,7 +51,13 @@ module.exports = projectController = {
   delete: async (req, res, next) => {
     try {
       const project = await projectService.delete(req.header('username'), req.params.id);
-      res.json(project);
+      if (project === 1) {
+        res.send(`Projeto ${req.params.id} deletado.`);
+      } else {
+        res.send(`Projeto não encontrado.`);
+      }
+      // res.json(project);
+      
     } catch (error) {
       next(error);
     }
