@@ -3,7 +3,6 @@ const router = express.Router();
 const userController = require("../controllers/userController.js")
 const projectController = require("../controllers/projectController.js");
 
-/* GET home page. */
 router.route("/")
   .get(userController.basicAuth, projectController.getByUser)
   .post(userController.basicAuth, projectController.create);
