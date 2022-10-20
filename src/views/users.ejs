@@ -1,0 +1,42 @@
+<%- include('partials/header.ejs') %>
+<%- include('partials/navbar') %>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Username</th>
+        <th scope="col">Data de criação</th>
+        <th scope="col">Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% users.forEach(function(user) { %>
+        <tr>
+            <form method="POST" action="users/delete" onsubmit="confirmEvent(event, this)">
+                <input type="hidden" name="idUser" value="<%= user.id %>">
+                <td><%= user.id %></td>
+                <td><%= user.name %></td>
+                <td><%= user.username %></td>
+                <td><%= moment(user.created_at).format('D/M/Y - H:mm:ss') %></td>
+                <td>
+                    <button class="btn btn-danger">Excluir</button>
+                </td>
+            </form>
+        </tr>
+    <% }); %>
+    </tbody>
+</table>
+<script>
+
+  // Confirma deleção de evento
+  function confirmEvent(event, form) {
+    event.preventDefault();
+    let decision = confirm('Deseja realmente deletar o usuário?');
+    if (decision) {
+      form.submit();
+    }
+  }
+</script>
+<%- include('partials/footer') %>
