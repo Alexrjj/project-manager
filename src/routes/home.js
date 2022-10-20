@@ -3,6 +3,10 @@ const router = express.Router();
 const homeController = require('../controllers/homeController.js');
 
 router.route('/')
-  .get(homeController.index);
+  .get(homeController.index)
+
+router.route('/login')
+  .get(homeController.login);
+
 
 module.exports = router;
