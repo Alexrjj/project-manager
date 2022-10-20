@@ -74,10 +74,32 @@ module.exports = userController = {
     }
   },
   
+  registerUser: async (req, res, next) => {
+    try {
+      res.render('registerUser')
+    } catch (error) {
+      next(error)
+    }
+  },
+  
   create: async (req, res, next) => {
     try {
-      const user = await userService.create(req.body);
-      res.json(user);
+      let name = req.body.name;
+      let username = req.body.username;
+      let password = req.body.password;
+  
+      if (name !== undefined && username !== undefined && password !== undefined) {
+        const checkUser = await userService.userExists(username)
+        if (checkUser.toString() === "") {
+          await userService.create(req.body.name, req.body.username, req.body.password);
+          res.redirect('/users');
+        } else {
+          res.send('Usuário já cadastrado.');
+          // res.redirect('/users/registerUser');
+        }
+      }
+      
+      // res.json(user);
     } catch (error) {
       next(error);
     }
