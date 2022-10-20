@@ -2,7 +2,11 @@ const db = require('../config/db.js');
 
 module.exports = userService = {
   getAll: async () => {
-    return db("users").select("users.*");
+    return db("users").select(
+      "users.id",
+      "users.name",
+      "users.username",
+      "users.created_at");
   },
   getByUsername: async (username) => {
     return db("users").where("username", username);
@@ -17,4 +21,8 @@ module.exports = userService = {
       username: user.username,
     });
   },
+  
+  delete: async(id) => {
+    return db("users").where("id", id).del();
+  }
 };
