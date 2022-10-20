@@ -11,9 +11,19 @@ module.exports = userService = {
   getByUsername: async (username) => {
     return db("users").where("username", username);
   },
-  create: async (user) => {
-    return db("users").insert(user);
+  
+  userExists: async (username) => {
+    return db("users").select("username").where("username", username)
   },
+  
+  create: async (name, username, password) => {
+    await db("users").insert({
+      name: name,
+      username: username,
+      password: password
+    });
+  },
+  
   update: async (id, user) => {
     return db("users").where("id", id).update({
       name: user.name,
