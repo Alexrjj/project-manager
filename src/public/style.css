@@ -1,0 +1,52 @@
+a {
+    text-decoration: none;
+}
+
+ul, li {
+    list-style-type: none;
+}
+
+body {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #F9FAFE;
+}
+
+form h1 {
+    padding: 2rem;
+}
+
+form input[type=text], input[type=password] {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px 16px;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.navbar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: #F9FAFE;
+    align-content: center;
+    padding: 1rem 2rem;
+}
+
+.navbar ul{
+    display: flex;
+    flex-direction: row;
+    gap: 0 20px ;
+    justify-content: right;
+    padding: 1rem;
+}
+
+.main {
+    text-align: center;
+    padding: 2rem;
+}
