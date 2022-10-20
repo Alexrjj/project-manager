@@ -1,0 +1,20 @@
+<%- include('partials/header.ejs') %>
+<%- include('partials/navbar') %>
+
+<div class="main">
+
+    <form method="POST" action="/users/saveUser">
+        <h1> User Register </h1>
+        <div class="container register">
+            <label for="name">Nome: </label>
+            <input type="text" placeholder="Digite o nome" id="name" name="name" required>
+            <label for="username">Username: </label>
+            <input type="text" placeholder="Digite o username" id="username" name="username" required>
+            <label for="password">Senha: </label>
+            <input type="password" placeholder="Digite a senha" id="password" name="password" required>
+            <button class="btn btn-primary" type="submit">Cadastrar</button>
+        </div>
+    </form>
+</div>
+
+<%- include('partials/footer') %>
