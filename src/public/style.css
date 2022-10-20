@@ -50,3 +50,8 @@ form input[type=text], input[type=password] {
     text-align: center;
     padding: 2rem;
 }
+
+.table {
+    max-width: 1000px;
+    margin: 0 auto;
+}
