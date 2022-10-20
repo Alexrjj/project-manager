@@ -2,7 +2,6 @@ const express = require('express')
 const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
-const moment = require('moment');
 const homeRouter = require('./routes/home.js');
 const userRouter = require('./routes/user.js');
 const projectRouter = require('./routes/project.js');
