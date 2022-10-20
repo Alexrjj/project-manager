@@ -1,6 +1,6 @@
 const userService = require("../services/userService.js");
-
-const express = require('express')
+const moment = require('moment');
+const express = require('express');
 const app = express();
 const expressBasicAuth = require('express-basic-auth')
 
@@ -55,7 +55,11 @@ module.exports = userController = {
   getAll: async (req, res, next) => {
     try {
       const users = await userService.getAll();
-      res.json(users);
+      // res.json(users);
+      res.render('users', {
+        users: users,
+        moment: moment
+      });
     } catch (error) {
       next(error);
     }
@@ -88,12 +92,14 @@ module.exports = userController = {
     }
   },
   
-  // delete: async (req, res, next) => {
-  //   try {
-  //     const user = await userService.delete(req.params.id);
-  //     res.json(user);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+  delete: async (req, res, next) => {
+    try {
+      let idUser = req.body.idUser;
+      await userService.delete(idUser);
+      // res.json(user);
+      res.redirect('/users')
+    } catch (error) {
+      next(error);
+    }
+  }
 }
