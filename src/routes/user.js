@@ -9,6 +9,9 @@ router.route("/")
   .get(userController.getAll)
   .post(userController.create);
 
+router.route("/authUser")
+  .post(userController.sendHeader, (userController.basicAuth));
+
 router.route('/registerUser')
   .get(userController.registerUser);
 
@@ -17,7 +20,6 @@ router.route('/saveUser')
 
 router.route('/delete')
   .post(userController.delete);
-module.exports = router;
 
 router.route("/:id")
   .get(userController.getById)
