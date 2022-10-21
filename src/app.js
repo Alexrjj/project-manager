@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require('path');
 const app = express();
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const homeRouter = require('./routes/home.js');
 const userRouter = require('./routes/user.js');
@@ -19,7 +20,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Views
 app.set('views', path.join(__dirname, '/views'))
 
-// app.use(express.json());
+// Session
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}));
 
 // Routes
 app.use('/', homeRouter);
