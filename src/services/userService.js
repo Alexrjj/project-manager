@@ -24,6 +24,11 @@ module.exports = userService = {
     });
   },
   
+  authUser: async (username, password) => {
+    // return db.raw('SELECT * FROM users WHERE username = ? AND password = ?', [username, password]);
+    return db("users").select("username").where("username", username)
+  },
+  
   update: async (id, user) => {
     return db("users").where("id", id).update({
       name: user.name,
@@ -32,7 +37,7 @@ module.exports = userService = {
     });
   },
   
-  delete: async(id) => {
+  delete: async (id) => {
     return db("users").where("id", id).del();
   }
 };
