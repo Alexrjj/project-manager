@@ -1,6 +1,7 @@
 const userService = require("../services/userService.js");
 const moment = require('moment');
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const expressBasicAuth = require('express-basic-auth')
 
@@ -15,16 +16,28 @@ function customAuthorizer(username, password, db_username, db_password) {
 }
 
 module.exports = userController = {
-  basicAuth: async(req, res, next) => {
+  sendHeader: async(req, res, next) => {
+    const usernameHeader = req.body.username;
+    const passHeader = req.body.password;
+    res.append('Access-Control-Expose-Headers', 'authorization');
+    res.append('Access-Control-Allow-Origin', '*');
+    req.headers.authorization = 'Basic ' + Buffer.from(usernameHeader + ':' + passHeader).toString('base64');
+    res.set('username');
+    req.headers.username = usernameHeader;
+    next();
+  },
+  
+  
+  basicAuth: async (req, res, next) => {
     try {
+      console.log(req.headers.authorization);
       const authHeader = req.headers.authorization;
       if (!authHeader) {
         return res.status(403).send('É necessário estar logado.');
       }
       
       const encoded = authHeader.substring(6);
-      const decoded = Buffer.from(encoded.toString(), 'base64').toString('ascii');
-      
+      const decoded = Buffer.from(encoded, 'base64').toString('ascii');
       try {
         const [username, password] = decoded.split(':');
         const dbUserInfo = await userService.getByUsername(username);
@@ -36,12 +49,17 @@ module.exports = userController = {
         if (!isAuthorized) {
           return res.status(403).send('Usuário ou senha incorreta.');
         }
-        
+        // res.writeHead('username', username);
+  
         if (req.header('username') !== dbUsername) {
           return res.status(403).send('Usuário enviado pelo header não autorizado!');
         }
+  
+        req.session.loggedin = true;
+        req.session.username = username;
+        res.redirect('/projects')
       } catch (error) {
-        if (res.status(403)){
+        if (res.status(403)) {
           return res.status(403).send('Usuário ou senha incorreta.');
         }
       }
@@ -87,7 +105,7 @@ module.exports = userController = {
       let name = req.body.name;
       let username = req.body.username;
       let password = req.body.password;
-  
+      
       if (name !== undefined && username !== undefined && password !== undefined) {
         const checkUser = await userService.userExists(username)
         if (checkUser.toString() === "") {
@@ -100,6 +118,39 @@ module.exports = userController = {
       }
       
       // res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  },
+  
+  authUser: async (req, res, next) => {
+    try {
+      // Capture the input fields
+      let username = req.body.username;
+      let password = req.body.password;
+      // Ensure the input fields exists and are not empty
+      if (username && password) {
+        // Execute SQL query that'll select the account from the database based on the specified username and password
+        const checkUser = userService.authUser(username, password)
+        res.json(checkUser)
+      }
+        // If there is an issue with the query, output the error
+        // If the account exists
+      //   if (checkUser.length > 0) {
+      //     // Authenticate the user
+      //     req.session.loggedin = true;
+      //     req.session.username = username;
+      //     // Redirect to home page
+      //     res.redirect('/home');
+      //   } else {
+      //     res.send('Incorrect Username and/or Password!');
+      //   }
+      //   res.end();
+      // } else {
+      //   res.send('Please enter Username and Password!');
+      //   res.end();
+      // }
+      
     } catch (error) {
       next(error);
     }
