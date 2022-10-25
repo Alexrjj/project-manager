@@ -10,7 +10,7 @@ router.route("/")
   .post(userController.create);
 
 router.route("/authUser")
-  .post(userController.sendHeader, (userController.basicAuth));
+  .post(userController.sendHeader, userController.basicAuth);
 
 router.route('/registerUser')
   .get(userController.registerUser);
