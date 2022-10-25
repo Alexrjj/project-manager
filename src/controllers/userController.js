@@ -21,17 +21,16 @@ module.exports = userController = {
     const passHeader = req.body.password;
     res.append('Access-Control-Expose-Headers', 'authorization');
     res.append('Access-Control-Allow-Origin', '*');
-    req.headers.authorization = 'Basic ' + Buffer.from(usernameHeader + ':' + passHeader).toString('base64');
-    res.set('username');
-    req.headers.username = usernameHeader;
+    app.locals.headers = 'Basic ' + Buffer.from(usernameHeader + ':' + passHeader).toString('base64');
+    app.locals.username = usernameHeader;
     next();
   },
   
   
   basicAuth: async (req, res, next) => {
     try {
-      console.log(req.headers.authorization);
-      const authHeader = req.headers.authorization;
+      const authHeader = app.locals.headers;
+      console.log(authHeader);
       if (!authHeader) {
         return res.status(403).send('É necessário estar logado.');
       }
@@ -49,11 +48,11 @@ module.exports = userController = {
         if (!isAuthorized) {
           return res.status(403).send('Usuário ou senha incorreta.');
         }
-  
-        if (req.header('username') !== dbUsername) {
+        
+        if (app.locals.username !== dbUsername) {
           return res.status(403).send('Usuário enviado pelo header não autorizado!');
         }
-  
+        
         req.session.loggedin = true;
         req.session.username = username;
         res.redirect('/projects')
