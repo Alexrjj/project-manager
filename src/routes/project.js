@@ -4,7 +4,7 @@ const userController = require("../controllers/userController.js")
 const projectController = require("../controllers/projectController.js");
 
 router.route("/")
-  .get(userController.basicAuth, projectController.getByUser)
+  .get(projectController.getByUser)
   .post(userController.basicAuth, projectController.create);
 
 router.route("/:id")
