@@ -1,4 +1,6 @@
 const projectService = require("../services/projectService.js");
+const express = require('express');
+const app = express();
 
 module.exports = projectController = {
   getById: async (req, res, next) => {
@@ -12,7 +14,8 @@ module.exports = projectController = {
   
   getByUser: async (req, res, next) => {
     try {
-      const project = await projectService.getByUser(req.header('username'));
+      const username = await req.app.locals;
+      const project = await projectService.getByUser(username);
       res.json(project);
     } catch (error) {
       next(error);
