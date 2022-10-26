@@ -1,0 +1,23 @@
+<%- include('partials/header.ejs') %>
+<%- include('partials/navbar-projects.ejs') %>
+
+<div class="main">
+
+    <form method="POST" action="/projects/saveProject">
+        <h1> Project Register </h1>
+        <div class="container register">
+            <label for="titulo">Título: </label>
+            <input type="text" placeholder="Digite o título" id="titulo" name="titulo" required>
+            <label for="cep">CEP: </label>
+            <input type="text" placeholder="Digite o CEP" id="cep" name="cep" required>
+            <label for="custo">Custo (R$): </label>
+            <input type="text" placeholder="Digite o custo do projeto" id="custo" name="custo" required>
+            <label for="prazo">Prazo: </label>
+            <input type="text" placeholder="Digite a data final" id="prazo" name="prazo" required>
+
+            <button class="btn btn-primary" type="submit">Salvar</button>
+        </div>
+    </form>
+</div>
+
+<%- include('partials/footer') %>
