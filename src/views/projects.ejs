@@ -1,0 +1,49 @@
+<%- include('partials/header.ejs') %>
+<%- include('partials/navbar-projects.ejs') %>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Título</th>
+        <th scope="col">Localização</th>
+        <th scope="col">Custo R$</th>
+        <th scope="col">Prazo</th>
+        <th scope="col">Status</th>
+        <th scope="col">Data de criação</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% projects.forEach(function(project) { %>
+        <tr>
+            <form method="POST" action="projects/delete" onsubmit="confirmEvent(event, this)">
+                <input type="hidden" name="idProject" value="<%= project.id %>">
+                <td><%= project.id %></td>
+                <td><%= project.title %></td>
+                <td><%= project.zip_code %></td>
+                <td><%= project.cost %></td>
+                <td><%= moment(project.deadline).format('D/M/Y') %></td>
+                <td><%= project.done %></td>
+                <td><%= moment(project.created_at).format('D/M/Y') %></td>
+                <td>
+                    <button class="btn btn-danger">Excluir</button>
+                </td>
+            </form>
+        </tr>
+    <% }); %>
+
+
+    </tbody>
+</table>
+<script>
+
+  // Confirma deleção de evento
+  function confirmEvent(event, form) {
+    event.preventDefault();
+    let decision = confirm('Deseja realmente deletar o projeto?');
+    if (decision) {
+      form.submit();
+    }
+  }
+</script>
+<%- include('partials/footer') %>
