@@ -38,25 +38,26 @@ module.exports = projectService = {
         'projects.zip_code',
         'projects.cost',
         'projects.done',
+        'projects.created_at',
         'projects.deadline')
       .where("projects.username", username)
   },
   
-  create: async (username, project) => {
-    console.log(project.title)
-    console.log(project.zip_code)
-    console.log(project.cost)
-    console.log(project.done)
-    console.log(project.deadline)
-    console.log(username)
+  projectExists: async (username, title) => {
+    return db("projects").select(
+      "title",
+      "username").where(
+        "title", title).andWhere("username", username)
+  },
+  
+  create: async (username, title, cep, custo, prazo) => {
     return db("projects")
       .insert([
         {
-          title: project.title,
-          zip_code: project.zip_code,
-          cost: project.cost,
-          done: project.done,
-          deadline: project.deadline,
+          title: title,
+          zip_code: cep,
+          cost: custo,
+          deadline: prazo,
           username: username
         }
       ]);
