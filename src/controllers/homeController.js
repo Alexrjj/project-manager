@@ -10,7 +10,11 @@ module.exports = homeController = {
   
   login: async (req, res, next) => {
     try {
-      res.render('login');
+      if (req.session.username) {
+        res.redirect('projects');
+      } else {
+        res.render('login');
+      }
     } catch (error) {
       next(error);
     }
