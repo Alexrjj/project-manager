@@ -1,7 +1,6 @@
 const userService = require("../services/userService.js");
 const moment = require('moment');
 const express = require('express');
-const session = require('express-session');
 const app = express();
 const expressBasicAuth = require('express-basic-auth')
 
@@ -16,21 +15,16 @@ function customAuthorizer(username, password, db_username, db_password) {
 }
 
 module.exports = userController = {
-  sendHeader: async(req, res, next) => {
-    const usernameHeader = req.body.username;
-    const passHeader = req.body.password;
-    res.append('Access-Control-Expose-Headers', 'authorization');
-    res.append('Access-Control-Allow-Origin', '*');
-    app.locals.headers = 'Basic ' + Buffer.from(usernameHeader + ':' + passHeader).toString('base64');
-    app.locals.username = usernameHeader;
-    next();
-  },
-  
-  
   basicAuth: async (req, res, next) => {
     try {
+      const usernameHeader = req.body.username;
+      const passHeader = req.body.password;
+      res.append('Access-Control-Expose-Headers', 'authorization');
+      res.append('Access-Control-Allow-Origin', '*');
+      app.locals.headers = 'Basic ' + Buffer.from(usernameHeader + ':' + passHeader).toString('base64');
+      app.locals.username = usernameHeader;
+      
       const authHeader = app.locals.headers;
-      console.log(authHeader);
       if (!authHeader) {
         return res.status(403).send('É necessário estar logado.');
       }
@@ -56,6 +50,7 @@ module.exports = userController = {
         req.session.loggedin = true;
         req.session.username = username;
         res.redirect('/projects')
+        next();
       } catch (error) {
         if (res.status(403)) {
           return res.status(403).send('Usuário ou senha incorreta.');
@@ -63,6 +58,15 @@ module.exports = userController = {
       }
       
       next();
+    } catch (error) {
+      next(error);
+    }
+  },
+  
+  logout: async (req, res, next) => {
+    try {
+      req.session.destroy();
+      res.redirect('/')
     } catch (error) {
       next(error);
     }
@@ -125,9 +129,9 @@ module.exports = userController = {
     try {
       let username = req.body.username;
       let password = req.body.password;
-
+      
       if (username && password) {
-       
+        
         const checkUser = userService.authUser(username, password)
         res.json(checkUser)
       }
