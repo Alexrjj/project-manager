@@ -7,10 +7,12 @@ const userController = require("../controllers/userController.js");
 
 router.route("/")
   .get(userController.getAll)
-  .post(userController.create);
 
-router.route("/authUser")
-  .post(userController.sendHeader, userController.basicAuth);
+router.route('/authUser')
+  .post(userController.basicAuth);
+
+router.route('/logout')
+  .get(userController.logout);
 
 router.route('/registerUser')
   .get(userController.registerUser);
